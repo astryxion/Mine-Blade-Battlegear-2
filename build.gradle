@@ -1,0 +1,158 @@
+buildscript {
+
+    repositories {
+
+        mavenCentral()
+
+        maven {
+            name = "forge"
+            url = "https://maven.minecraftforge.net/"
+        }
+
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+
+    dependencies {
+        classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.1.+') {
+            changing = true
+        }
+    }
+}
+
+apply plugin: 'forge'
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+// Define properties file
+ext.configFile = file "mod.properties"
+configFile.withReader {
+    // Load config. Can be referenced as config
+    def prop = new Properties()
+    prop.load(it)
+    ext.config = new ConfigSlurper().parse prop
+}
+//Set things from the properties file
+version = config.modversion
+group = "com.github.mine-blade.battlegear"
+minecraft {
+    runDir = "eclipse"
+    version = config.mcversion + "-" + config.forgeversion
+    replace '$version', version
+}
+archivesBaseName = config.mcversion + "-" + config.distname
+//Set the workspace
+sourceSets {
+    main {
+        resources {
+            srcDirs 'battlegear mod src/minecraft' include('assets/**', '*.cfg', '*.png', '*.mcmeta', '*.info')
+        }
+	    java {
+	        srcDirs 'battlegear mod src/minecraft' include('mods/**')
+	    }
+    }
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        // replace stuff in mcmod.info, nothing else
+        include 'mcmod.info'
+        // replace version and mcversion
+        expand 'name':config.modname, 'version':config.modversion, 'mcversion':config.mcversion
+    }
+    // copy everything else
+    from(projectDir) {
+        include('LICENCE', 'README.md')
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        include('*.lang', '*.wav', '*.png', '*.cfg', '*.mcmeta')
+    }
+}
+//The coremod manifest attributes
+def coremodManifest = {
+    attributes 'FMLCorePlugin': config.loadingPlugin
+    attributes 'FMLCorePluginContainsFMLMod': config.containsMod
+}
+jar {
+    //Place jar into distribution folder
+    destinationDir = file 'battlegear dist'
+    //Keep the jar as clean as possible
+    includeEmptyDirs = false
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    // Add Coremod Manifest
+    manifest coremodManifest
+}
+//Perform checksum and add it next to the jar
+jar.doLast { task ->
+    ant.checksum file: task.archivePath
+}
+
+task jarBGSrc(type:Jar) {
+    destinationDir = file 'battlegear api'
+    baseName = config.mcversion + "-Battlegear-Src"
+    from(sourceSets.main.java.srcDirs){
+        include 'mods/battlegear2/**'
+        exclude '**/DualHeldLight.java', '**/EquipGearTab.java', '**/SigilTab.java'
+    }
+    // Add license
+    from(projectDir) {
+        include 'LICENCE'
+    }
+}
+
+task jarMUDSrc(type:Jar) {
+    destinationDir = file 'battlegear api'
+    baseName = config.mcversion + "-MUD-Src"
+    from(sourceSets.main.java.srcDirs) {
+        include 'mods/mud/**'
+    }
+    // Add license
+    from(projectDir) {
+        include 'LICENCE'
+    }
+}
+
+task jarBGBin(type:Jar) {
+    destinationDir = file 'battlegear api'
+    baseName = config.mcversion + "-Battlegear-Bin"
+    // Add classes
+    from('build/classes/main'){
+        include 'mods/battlegear2/**'
+        exclude '**/DualHeldLight.class', '**/EquipGearTab.class', '**/SigilTab.class'
+    }
+    // Add Resources
+    from(sourceSets.main.resources.srcDirs) {
+        include 'assets/battlegear2/**', '*.cfg', '*.png', '*.info', '*.mcmeta'
+    }
+    // Add license
+    from(projectDir) {
+        include 'LICENCE'
+    }
+    // Add Coremod Manifest
+    manifest coremodManifest
+}
+
+task jarMUDBin(type:Jar){
+    destinationDir = file 'battlegear api'
+    baseName = config.mcversion + "-MUD-Bin"
+    // Add classes
+    from('build/classes/main') {
+        include 'mods/mud/**'
+    }
+    // Add resources
+    from(sourceSets.main.resources.srcDirs) {
+        include 'assets/mud/**'
+    }
+    // Add license
+    from(projectDir) {
+        include 'LICENCE'
+    }
+}
+tasks.build.dependsOn('jarMUDSrc','jarBGSrc','jarMUDBin','jarBGBin')
+idea { module { inheritOutputDirs = true } }
