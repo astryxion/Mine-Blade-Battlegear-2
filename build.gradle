@@ -40,7 +40,7 @@ group = "com.github.mine-blade.battlegear"
 minecraft {
     runDir = "eclipse"
     version = config.mcversion + "-" + config.forgeversion
-    replace '$version', version
+    replace '$version', config.modversion
 }
 archivesBaseName = config.mcversion + "-" + config.distname
 //Set the workspace

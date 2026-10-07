@@ -80,14 +80,14 @@ public final class ItemRendererTransformer extends TransformerBase {
                 found++;
             }
         }
-        methods.add(methods.size(), generateSetter(itemRendererClass, "setItemToRender", "offHandItemToRender", "L" + itemStackClass + ";"));
-        methods.add(methods.size(), generateSetter(itemRendererClass, "setEquippedItemSlot", "equippedItemOffhandSlot", "I"));
-        methods.add(methods.size(), generateSetter(itemRendererClass, "setEquippedProgress", "equippedOffHandProgress", "F"));
-        methods.add(methods.size(), generateSetter(itemRendererClass, "setPrevEquippedProgress", "prevEquippedOffHandProgress", "F"));
-        methods.add(methods.size(), generateGetter(itemRendererClass, "getItemToRender", "offHandItemToRender", "L" + itemStackClass + ";"));
-        methods.add(methods.size(), generateGetter(itemRendererClass, "getEquippedItemSlot", "equippedItemOffhandSlot", "I"));
-        methods.add(methods.size(), generateGetter(itemRendererClass, "getEquippedProgress", "equippedOffHandProgress", "F"));
-        methods.add(methods.size(), generateGetter(itemRendererClass, "getPrevEquippedProgress", "prevEquippedOffHandProgress", "F"));
+        methods.add(methods.size(), generateSetter(itemRendererClass, "battlegear2$setOffHandItemToRender", "offHandItemToRender", "L" + itemStackClass + ";"));
+        methods.add(methods.size(), generateSetter(itemRendererClass, "battlegear2$setEquippedItemOffhandSlot", "equippedItemOffhandSlot", "I"));
+        methods.add(methods.size(), generateSetter(itemRendererClass, "battlegear2$setEquippedOffHandProgress", "equippedOffHandProgress", "F"));
+        methods.add(methods.size(), generateSetter(itemRendererClass, "battlegear2$setPrevEquippedOffHandProgress", "prevEquippedOffHandProgress", "F"));
+        methods.add(methods.size(), generateGetter(itemRendererClass, "battlegear2$getOffHandItemToRender", "offHandItemToRender", "L" + itemStackClass + ";"));
+        methods.add(methods.size(), generateGetter(itemRendererClass, "battlegear2$getEquippedItemOffhandSlot", "equippedItemOffhandSlot", "I"));
+        methods.add(methods.size(), generateGetter(itemRendererClass, "battlegear2$getEquippedOffHandProgress", "equippedOffHandProgress", "F"));
+        methods.add(methods.size(), generateGetter(itemRendererClass, "battlegear2$getPrevEquippedOffHandProgress", "prevEquippedOffHandProgress", "F"));
         return found == 2;
     }
 

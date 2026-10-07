@@ -47,35 +47,35 @@
 +    private float equippedOffHandProgress = 0.0F;
 +    private float prevEquippedOffHandProgress = 0.0F;
 +
-+    public ItemStack getItemToRender(){
++    public ItemStack battlegear2$getOffHandItemToRender(){
 +        return offHandItemToRender;
 +    }
 +
-+    public void setItemToRender(ItemStack item){
++    public void battlegear2$setOffHandItemToRender(ItemStack item){
 +        offHandItemToRender = item;
 +    }
 +
-+    public int getEquippedItemSlot(){
++    public int battlegear2$getEquippedItemOffhandSlot(){
 +        return equippedItemOffhandSlot;
 +    }
 +
-+    public void setEquippedItemSlot(int slot){
++    public void battlegear2$setEquippedItemOffhandSlot(int slot){
 +        equippedItemOffhandSlot = slot;
 +    }
 +
-+    public float getEquippedProgress(){
++    public float battlegear2$getEquippedOffHandProgress(){
 +        return equippedOffHandProgress;
 +    }
 +
-+    public void setEquippedProgress(float progress){
++    public void battlegear2$setEquippedOffHandProgress(float progress){
 +        equippedOffHandProgress = progress;
 +    }
 +
-+    public float getPrevEquippedProgress(){
++    public float battlegear2$getPrevEquippedOffHandProgress(){
 +        return prevEquippedOffHandProgress;
 +    }
 +
-+    public void setPrevEquippedProgress(float progress){
++    public void battlegear2$setPrevEquippedOffHandProgress(float progress){
 +        prevEquippedOffHandProgress = progress;
      }
  }
